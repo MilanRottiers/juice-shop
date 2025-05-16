@@ -1,0 +1,34 @@
+name: Generate SBOM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install CycloneDX CLI
+        run: |
+          curl -sSfL https://github.com/CycloneDX/cyclonedx-node-module/releases/latest/download/cyclonedx-npm-linux-x64 -o cyclonedx-npm
+          chmod +x cyclonedx-npm
+          sudo mv cyclonedx-npm /usr/local/bin/
+
+      - name: Generate SBOM
+        run: cyclonedx-npm --output-format json --output-file sbom.json
+
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: juice-shop-sbom
+          path: sbom.json
