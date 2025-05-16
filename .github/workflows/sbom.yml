@@ -19,7 +19,7 @@ jobs:
         run: npm install
 
       - name: Install CycloneDX CLI
-        run: |
+        run:
           curl -sSfL https://github.com/CycloneDX/cyclonedx-node-module/releases/latest/download/cyclonedx-npm-linux-x64 -o cyclonedx-npm
           chmod +x cyclonedx-npm
           sudo mv cyclonedx-npm /usr/local/bin/
